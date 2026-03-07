@@ -12,9 +12,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@serialport/parser-readline": "^13.0.0",
     "@tailwindcss/vite": "^4.2.1",
     "axios": "^1.13.6",
     "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "framer-motion": "^12.35.0",
     "lucide-react": "^0.577.0",
@@ -23,8 +25,7 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",
     "serialport": "^13.0.0",
-    "ws": "^8.19.0",
-    "@serialport/parser-readline": "^13.0.0"
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
