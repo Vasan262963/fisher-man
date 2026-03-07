@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const fishRoutes = require('./routes/fishRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const netDataRoutes = require('./routes/netDataRoutes');
+const hardwareRoutes = require('./routes/hardwareRoutes');
 
 // Connect to DB
 connectDB();
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/fish', fishRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/netdata', netDataRoutes);
+app.use('/api/hardware', hardwareRoutes);
 
 // Error Handling Middleware for Unmatched Routes
 app.use((req, res, next) => {

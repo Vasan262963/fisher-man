@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { isSeasonalRegulationActive } from "../utils/dateUtils";
+import { useHardwareWeight } from "../hooks/useHardwareWeight";
 import {
     Fish,
     ClipboardList,
@@ -16,13 +18,15 @@ import {
     Trash2,
     PackageCheck,
     PackageX,
-    LayoutList
+    LayoutList,
+    Bot
 } from "lucide-react";
 
 // ---------- PREMIUM STYLES ----------
 // Removed static style objects in favor of Tailwind classes
 
 const FishermanDashboard: React.FC = () => {
+    const navigate = useNavigate();
     const [activeView, setActiveView] = useState<"home" | "upload" | "orders" | "income" | "schemes" | "advice" | "profile" | "net-monitor" | "listings">("home");
     const [myListings, setMyListings] = useState<any[]>([]);
     const [lang, setLang] = useState<"en" | "ta">("en");
@@ -45,6 +49,8 @@ const FishermanDashboard: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const { weight: hardwareWeight, isOffline: hardwareOffline } = useHardwareWeight();
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -56,18 +62,13 @@ const FishermanDashboard: React.FC = () => {
         }
     };
 
-    // Simulation logic
+    // Sync state with hardware data
     useEffect(() => {
-        if (isManualMode) return; // Stop updates if manual
-
-        const interval = setInterval(() => {
-            const newLoad = Math.floor(Math.random() * 80);
-            setNetLoad(newLoad);
-            setNetStatus(newLoad >= 50 ? 'STOP' : 'SAFE');
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, [isManualMode]);
+        if (!isManualMode && !hardwareOffline && hardwareWeight !== null) {
+            setNetLoad(hardwareWeight);
+            setNetStatus(hardwareWeight >= 50 ? 'STOP' : 'SAFE');
+        }
+    }, [hardwareWeight, hardwareOffline, isManualMode]);
 
     const updateManualLoad = (val: number) => {
         setNetLoad(val);
@@ -275,7 +276,7 @@ const FishermanDashboard: React.FC = () => {
             </header>
 
             {/* ---------- CONTENT ---------- */}
-            <main className="max-w-4xl mx-auto p-4 md:p-8">
+            <main className="w-full px-4 md:px-8 py-8">
                 {activeView === "home" && (
                     <div className="animate-fade-in">
                         <div className="glass-card mb-6 p-6 border-l-4 border-l-neon-400 bg-ocean-800/40">
@@ -291,10 +292,8 @@ const FishermanDashboard: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* LIVE NET STATUS ON HOME PAGE */}
-                        <div style={{
+                        <div className="w-full mb-8" style={{
                             background: netStatus === 'STOP' ? '#fee2e2' : '#dcfce7',
-                            margin: '1rem',
                             padding: '1.5rem',
                             borderRadius: '16px',
                             border: `2px solid ${netStatus === 'STOP' ? '#ef4444' : '#22c55e'}`,
@@ -332,15 +331,19 @@ const FishermanDashboard: React.FC = () => {
                                             <span style={{ fontSize: '1rem', fontWeight: 700 }}>kg</span>
                                         </div>
                                     ) : (
-                                        <div style={{ fontSize: '2rem', fontWeight: 900, color: '#1e293b' }}>
-                                            {netLoad} <span style={{ fontSize: '1rem' }}>kg</span>
+                                        <div style={{ fontSize: hardwareOffline ? '1.2rem' : '2rem', fontWeight: 900, color: '#1e293b' }}>
+                                            {hardwareOffline ? (
+                                                <span style={{ color: '#ef4444' }}>Hardware Offline</span>
+                                            ) : (
+                                                hardwareWeight === null ? 'Waiting for hardware...' : `${netLoad} kg`
+                                            )}
                                         </div>
                                     )}
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
                                     <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600 }}>STRESS</div>
                                     <div style={{ fontSize: '1.2rem', fontWeight: 800, color: netLoad >= 50 ? '#ef4444' : '#1e293b' }}>
-                                        {getStressLevel(netLoad)}
+                                        {hardwareOffline ? '---' : getStressLevel(netLoad)}
                                     </div>
                                 </div>
                             </div>
@@ -418,6 +421,18 @@ const FishermanDashboard: React.FC = () => {
                                     <LayoutList size={36} className="text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.7)]" />
                                 </div>
                                 <span className="text-sm font-semibold text-white tracking-wide group-hover:text-neon-400 transition-colors uppercase tracking-wider">{currentT.listings}</span>
+                            </div>
+                            <div className="rounded-xl bg-white/10 backdrop-blur border border-neon-400/30 hover:scale-105 hover:shadow-neon-400/50 transition-all duration-300 p-6 flex flex-col items-center justify-center gap-3 cursor-pointer group" onClick={() => window.dispatchEvent(new CustomEvent('ai:open'))}>
+                                <div className="bg-ocean-800/80 w-16 h-16 rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-neon-400/50 transition-all">
+                                    <Bot size={36} className="text-neon-400 drop-shadow-[0_0_10px_rgba(0,245,255,0.7)]" />
+                                </div>
+                                <span className="text-sm font-semibold text-white tracking-wide group-hover:text-neon-400 transition-colors uppercase tracking-wider text-center">AI Assistant</span>
+                            </div>
+                            <div className="rounded-xl bg-white/10 backdrop-blur border border-neon-400/30 hover:scale-105 hover:shadow-neon-400/50 transition-all duration-300 p-6 flex flex-col items-center justify-center gap-3 cursor-pointer group" onClick={() => navigate('/dashboard/hardware')}>
+                                <div className="bg-ocean-800/80 w-16 h-16 rounded-2xl flex items-center justify-center border border-white/5 group-hover:border-neon-400/50 transition-all">
+                                    <BarChart3 size={36} className="text-neon-400 drop-shadow-[0_0_10px_rgba(0,245,255,0.7)]" />
+                                </div>
+                                <span className="text-sm font-semibold text-white tracking-wide group-hover:text-neon-400 transition-colors uppercase tracking-wider text-center">Hardware Sensors</span>
                             </div>
                         </div>
                     </div>

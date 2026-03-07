@@ -7,10 +7,11 @@ import AdminDashboard from './components/AdminDashboard';
 import GovernmentSchemes from './components/GovernmentSchemes';
 import ProductDetails from './components/ProductDetails';
 import OrderTracking from './components/OrderTracking';
-import AIChatbot from './components/AIChatbot';
+import AIAssistant from './components/AIAssistant';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import OrderPage from './pages/OrderPage';
+import HardwareDashboard from './pages/HardwareDashboard';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import PrivateRoute from './routes/PrivateRoute';
 
@@ -24,7 +25,7 @@ const Navigation = () => {
 
   const handleLogoClick = () => {
     if (role === 'buyer' || role === 'customer') navigate('/customerdashboard');
-    else if (role === 'fisherman') navigate('/fishermandashboard');
+    else if (role === 'fisherman') navigate('/dashboard');
     else if (role === 'admin') navigate('/admindashboard');
     else navigate('/');
   };
@@ -68,7 +69,7 @@ const AppContent = () => {
 
       <Navigation />
 
-      <main className="flex-1 w-full max-w-[1400px] mx-auto z-10">
+      <main className="flex-1 w-full px-4 md:px-8 z-10">
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -84,7 +85,10 @@ const AppContent = () => {
           </Route>
 
           <Route element={<PrivateRoute allowedRole="fisherman" />}>
-            <Route path="/fishermandashboard" element={<FishermanDashboard />} />
+            <Route path="/dashboard" element={<FishermanDashboard />} />
+            <Route path="/dashboard/hardware" element={<HardwareDashboard />} />
+            {/* Backward compatibility for old link */}
+            <Route path="/fishermandashboard" element={<Navigate to="/dashboard" replace />} />
           </Route>
 
           <Route element={<PrivateRoute allowedRole="admin" />}>
@@ -102,7 +106,7 @@ const AppContent = () => {
         </div>
       </footer>
 
-      <AIChatbot role={role} />
+      <AIAssistant role={role} />
     </div>
   );
 };
