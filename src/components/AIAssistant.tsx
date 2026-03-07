@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, X, Send } from 'lucide-react';
-import { API_BASE_URL } from '../config';
+import API_BASE_URL from '../config/api';
 
 
 interface Message {

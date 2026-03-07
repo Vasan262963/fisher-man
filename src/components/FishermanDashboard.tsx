@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { isSeasonalRegulationActive } from "../utils/dateUtils";
 import { useHardwareWeight } from "../hooks/useHardwareWeight";
-import { API_BASE_URL } from "../config";
+import API_BASE_URL from "../config/api";
 import {
     Fish,
     ClipboardList,

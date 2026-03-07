@@ -6,7 +6,7 @@ import OrderTracking from './OrderTracking';
 import OrderChat from './OrderChat';
 
 import axios from 'axios';
-import { API_BASE_URL } from '../config';
+import API_BASE_URL from '../config/api';
 
 
 const CustomerDashboard: React.FC<{ defaultTab?: 'listings' | 'orders' }> = ({ defaultTab = 'listings' }) => {
