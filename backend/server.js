@@ -33,7 +33,14 @@ wss.on('connection', (ws) => {
 });
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://fisher-man.vercel.app",
+        "https://fisher-m53n2maga-haswin-singhs-projects.vercel.app"
+    ],
+    credentials: true
+}));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
