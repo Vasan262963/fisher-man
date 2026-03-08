@@ -95,54 +95,65 @@ const GovernmentSchemes: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     ];
 
     return (
-        <div className="schemes-module animate-fade-in" style={{ padding: '2rem' }}>
-            <header style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <button className="btn btn-secondary" onClick={onBack}>← Back</button>
-                <h1 style={{ fontSize: '2rem', color: 'var(--primary)' }}>Government Schemes</h1>
+        <div className="max-w-6xl mx-auto px-6 py-8 space-y-8 animate-fade-in text-white">
+            <header className="flex items-center gap-4 mb-8">
+                <button
+                    className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 active:scale-95 shadow-lg shadow-black/20"
+                    onClick={onBack}
+                >
+                    <span className="text-xl">←</span>
+                    <span className="font-semibold uppercase tracking-wider text-xs">Back</span>
+                </button>
+                <h1 className="text-3xl font-black tracking-tight drop-shadow-md">Government Schemes</h1>
             </header>
 
-            <div className="grid-container">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {schemes.map((scheme) => (
-                    <div key={scheme.id} className="premium-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                            <div>
-                                <h3 style={{ marginBottom: '0.5rem', lineHeight: '1.3', fontSize: '1.25rem' }}>{scheme.title}</h3>
-                                <span className="badge badge-warning" style={{ fontSize: '0.75rem' }}>{scheme.category}</span>
+                    <div
+                        key={scheme.id}
+                        className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 shadow-lg flex flex-col h-full group transition-all duration-300 hover:bg-white/15 hover:-translate-y-1"
+                    >
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="space-y-2">
+                                <h3 className="text-xl font-bold tracking-tight group-hover:text-cyan-400 transition-colors leading-tight">
+                                    {scheme.title}
+                                </h3>
+                                <span className="inline-block bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                    {scheme.category}
+                                </span>
                             </div>
                         </div>
 
-                        <p style={{ color: 'var(--text-light)', fontSize: '0.95rem', marginBottom: '1.5rem', flexGrow: 1 }}>
+                        <p className="text-white/70 text-sm leading-relaxed mb-6 flex-grow italic">
                             {scheme.description}
                         </p>
 
-                        <div style={{ background: '#f8fafc', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-                            <div style={{ marginBottom: '0.75rem' }}>
-                                <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-light)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Best For</strong>
-                                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--primary)' }}>{scheme.bestFor}</span>
+                        <div className="bg-black/20 rounded-xl p-5 mb-6 space-y-4 border border-white/5">
+                            <div>
+                                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-1">Best For</h4>
+                                <p className="text-sm font-bold text-cyan-400 leading-tight">{scheme.bestFor}</p>
                             </div>
 
                             {scheme.benefits && (
                                 <div>
-                                    <strong style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-light)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Key Benefits</strong>
-                                    <span style={{ fontSize: '0.9rem', color: 'var(--text-dark)' }}>{scheme.benefits}</span>
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-1">Key Benefits</h4>
+                                    <p className="text-sm text-white/90 leading-tight">{scheme.benefits}</p>
                                 </div>
                             )}
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto' }}>
+                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/10">
                             <a
                                 href={scheme.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn btn-secondary"
-                                style={{ flex: 1, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                className="text-blue-400 hover:text-blue-300 font-medium transition-colors flex items-center gap-1 text-sm underline-offset-4 hover:underline"
                             >
                                 Official Link ↗
                             </a>
                             <button
-                                className="btn btn-primary"
+                                className="bg-cyan-500 hover:bg-cyan-600 text-white px-5 py-2.5 rounded-lg font-black uppercase tracking-widest text-xs transition-all shadow-lg hover:shadow-cyan-500/30 active:scale-95"
                                 onClick={() => window.open(scheme.link, '_blank')}
-                                style={{ flex: 1 }}
                             >
                                 Apply Now
                             </button>
@@ -151,18 +162,24 @@ const GovernmentSchemes: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 ))}
             </div>
 
-            <div className="premium-card" style={{ marginTop: '3rem', padding: '2.5rem', background: 'var(--ocean-gradient)', color: 'white', borderRadius: '16px', textAlign: 'center' }}>
-                <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem' }}>Stay Updated on New Schemes</h2>
-                <p style={{ opacity: 0.9, marginBottom: '2rem', maxWidth: '600px', marginInline: 'auto' }}>
-                    Subscribe to receive automatic notifications about new government subsidies, deadline reminders, and seasonal welfare benefits tailored for you.
+            {/* Newsletter Section */}
+            <div className="bg-gradient-to-br from-ocean-900 via-ocean-950 to-black border border-white/10 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden shadow-2xl">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50"></div>
+
+                <h2 className="text-3xl font-black mb-4 drop-shadow-md">Stay Updated on New Schemes</h2>
+                <p className="text-white/60 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Subscribe to receive automatic notifications about new government subsidies, deadline reminders, and seasonal welfare benefits tailored for your region.
                 </p>
-                <div style={{ display: 'flex', gap: '1rem', maxWidth: '500px', marginInline: 'auto' }}>
+
+                <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
                     <input
                         type="email"
                         placeholder="Enter your email or phone"
-                        style={{ flex: 1, padding: '1rem', borderRadius: '8px', border: 'none', fontSize: '1rem' }}
+                        className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-cyan-400 transition-all placeholder:text-white/20 text-sm"
                     />
-                    <button className="btn btn-secondary" style={{ paddingInline: '2rem', fontWeight: 600 }}>Subscribe</button>
+                    <button className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs transition-all shadow-lg hover:shadow-cyan-500/30 active:scale-95 whitespace-nowrap">
+                        Subscribe Now
+                    </button>
                 </div>
             </div>
         </div>
