@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import './index.css';
 import FishermanDashboard from './components/FishermanDashboard';
 import CustomerDashboard from './components/CustomerDashboard';
@@ -107,6 +108,7 @@ const AppContent = () => {
       </footer>
 
       <AIAssistant role={role} />
+      <Analytics />
     </div>
   );
 };
